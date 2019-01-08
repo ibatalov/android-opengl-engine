@@ -1,0 +1,23 @@
+uniform mat4 viewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 modelMatrix;
+
+uniform mat4 lightSpaceMatrix;
+
+attribute vec3 a_vertex;
+attribute vec3 a_normal;
+attribute vec4 a_color;
+
+varying vec3 v_vertex;
+varying vec3 v_normal;
+varying vec4 v_color;
+
+varying vec4 light_space_coord;
+
+void main() {
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(a_vertex, 1.0);
+    light_space_coord = lightSpaceMatrix * modelMatrix * vec4(a_vertex, 1.0);
+    v_vertex = vec3(modelMatrix * vec4(a_vertex, 1.0));
+    v_normal = normalize(mat3(modelMatrix) * a_normal);
+    v_color = a_color;
+}
